@@ -8,13 +8,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap');
 
         :root {
-            --bg-color: #f1f8e9;        /* Xanh nền rất nhạt */
-            --container-bg: #ffffff;    /* Trắng cho nền thẻ */
-            --primary-color: #81c784;   /* Xanh lục pastel (nút bấm, viền thẻ) */
-            --primary-dark: #4caf50;    /* Xanh đậm hơn (hiệu ứng hover, chữ tiêu đề) */
+            --bg-color: #f1f8e9;        
+            --container-bg: #ffffff;    
+            --primary-color: #81c784;   
+            --primary-dark: #4caf50;    
             --text-color: #333333;      
-            --border-color: #c8e6c9;    /* Xanh nhạt cho viền các khối chữ */
-            --han-color: #2e7d32;       /* Xanh rất đậm để chữ Hán nổi bật */
+            --border-color: #c8e6c9;    
+            --han-color: #2e7d32;       
         }
 
         body {
@@ -158,6 +158,35 @@
             font-style: italic;
         }
 
+        /* --- CSS MỚI CHO NÚT "XEM ĐÁP ÁN" --- */
+        .btn-show-answer {
+            margin-top: 10px;
+            padding: 6px 12px;
+            font-size: 15px;
+            font-family: 'Times New Roman', serif;
+            background-color: transparent;
+            color: #c62828;
+            border: 1px solid #c62828;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .btn-show-answer:hover {
+            background-color: #c62828;
+            color: #ffffff;
+        }
+
+        .revealed-answer {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #ffcdd2;
+            font-family: 'Noto Serif TC', 'PMingLiU', 'SimSun', 'Times New Roman', serif;
+            font-size: 1.6em;
+            color: #c62828;
+        }
+        /* ------------------------------------ */
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
@@ -179,7 +208,6 @@
 <body>
 
 <div class="page-container">
-    
     <div class="header-container">
         <h1 class="page-title">Luyện dịch Việt - Hán</h1>
         <a href="https://voduongthangquang-lab.github.io/PHTX-GK3-HANCO-HanVietP3/" class="btn-next-part" target="_blank">
@@ -244,6 +272,9 @@
                     <div class="result-area" id="result-area-${index}">
                         <div class="full-sentence" id="full-sentence-${index}"></div>
                         <div class="translation" id="translation-${index}"></div>
+                        
+                        <button class="btn-show-answer" id="btn-show-answer-${index}" style="display: none;" onclick="showAnswer(${index})">Xem đáp án</button>
+                        <div class="revealed-answer" id="revealed-answer-${index}" style="display: none;"></div>
                     </div>
                 </div>
             `;
@@ -318,12 +349,19 @@
         const fullSentenceEl = document.getElementById(`full-sentence-${qIndex}`);
         const translationEl = document.getElementById(`translation-${qIndex}`);
         const answerArea = document.getElementById(`answer-area-${qIndex}`);
+        
+        const btnShowAnswer = document.getElementById(`btn-show-answer-${qIndex}`);
+        const revealedAnswer = document.getElementById(`revealed-answer-${qIndex}`);
 
         if (userStr === correctStr) {
             state.isCompleted = true; 
             resultArea.classList.remove('error');
             fullSentenceEl.innerText = data.c; 
             translationEl.innerText = data.n;
+            
+            // Nếu đúng thì ẩn nút xem đáp án đi
+            btnShowAnswer.style.display = 'none';
+            revealedAnswer.style.display = 'none';
             resultArea.style.display = 'block';
             
             Array.from(answerArea.children).forEach(child => child.onclick = null);
@@ -335,8 +373,18 @@
             resultArea.classList.add('error');
             fullSentenceEl.innerText = "Chưa đúng thứ tự rồi!";
             translationEl.innerText = "Hãy nhấn vào chữ bên trên để gỡ ra và xếp lại nhé.";
+            
+            btnShowAnswer.style.display = 'inline-block';
+            revealedAnswer.style.display = 'none';
+            revealedAnswer.innerText = "Đáp án: " + correctStr; // Lưu sẵn đáp án vào khung
+            
             resultArea.style.display = 'block';
         }
+    }
+
+    function showAnswer(qIndex) {
+        document.getElementById(`btn-show-answer-${qIndex}`).style.display = 'none';
+        document.getElementById(`revealed-answer-${qIndex}`).style.display = 'block';
     }
 
     initApp();
