@@ -74,13 +74,43 @@
             margin-bottom: 30px;
         }
 
-            .am-han-viet {
+        .am-han-viet {
             font-family: 'Times New Roman', serif;
             font-size: 1.8em;
             color: var(--primary-dark);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: bold;
         }
+
+        /* --- Style cho ô nhập dịch nghĩa --- */
+        .translation-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            resize: vertical;
+            background-color: #fafafa;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .translation-input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+            background-color: #fff;
+        }
+
+        .translation-input:disabled {
+            background-color: #e0e0e0;
+            color: #555;
+            cursor: not-allowed;
+            border-color: #ccc;
+        }
+        /* ---------------------------------- */
 
         .answer-area {
             min-height: 60px;
@@ -157,6 +187,12 @@
             font-style: italic;
         }
 
+        .translation strong {
+            font-weight: bold;
+            color: var(--primary-dark);
+            font-style: normal;
+        }
+
         .btn-show-answer {
             margin-top: 10px;
             padding: 6px 12px;
@@ -179,7 +215,6 @@
             margin-top: 12px;
             padding-top: 12px;
             border-top: 1px dashed #ffcdd2;
-            /* Áp dụng font Khải thể */
             font-family: "KaiTi", "STKaiti", "Noto Serif SC", "SimSun", serif;
             font-size: 1.6em;
             color: #c62828;
@@ -200,7 +235,6 @@
             30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
-
     </style>
 </head>
 <body>
@@ -233,7 +267,22 @@
         { h: "Mặc giả, bất vi phiền não sở nhiễu.", c: "默者，不為煩惱所擾。", n: "Mặc là không bị phiền não làm rối loạn." },
         { h: "Công đức viên mãn, cố hiệu Thích Ca Mâu Ni.", c: "功德圓滿,故號釋迦牟尼。", n: "Công đức tròn đủ, cho nên hiệu là Thích Ca Mâu Ni." },
         { h: "Kim ngã bối ký thị Phật chi đệ tử,", c: "今我輩既是佛之弟子。", n: "Ngày nay, chúng ta đã là đệ tử của Ngài." },
-        { h: "Phật chi đệ tử ưng học Phật chi Năng nhân tịch mặc.", c: "佛之弟子，應學佛之能仁寂默。", n: "Đệ tử của Ngài phải học theo cái đức tánh “Năng nhơn Tịch mặc” của Ngài." }
+        { h: "Phật chi đệ tử ưng học Phật chi Năng nhân tịch mặc.", c: "佛之弟子，應學佛之能仁寂默。", n: "Đệ tử của Ngài phải học theo cái đức tánh “Năng nhơn Tịch mặc” của Ngài." },
+        { h: "Hữu khách chí, khán ngã phụ. Ngã nghênh khách, nhập thất nội.", c: "有客至,看我父。我迎客,入室内。", n: "Có khách đến, thăm cha tôi. Tôi rước khách vào trong nhà." },
+        { h: "Phụ kiến khách, vấn tính danh. Phụ tọa hữu, khách tọa tả.", c: "父見客,問姓名。父坐右,客坐左。", n: "Cha trông thấy khách, hỏi họ tên. Cha ngồi bên phải, khách ngồi bên trái." },
+        { h: "Tân thư nhứt sách. Tiên sinh giảng, học sinh thính.", c: "新書一册,先生講,學生聽。", n: "Một cuốn sách mới, thầy giảng, trò nghe." },
+        { h: "Tiên sanh tiên độc tự âm, hậu giải tự nghĩa.", c: "先生先讀字音,後解字義。", n: "Thầy trước đọc âm chữ, sau giải thích nghĩa chữ." },
+        { h: "Minh nguyệt tương xuất, trùng thanh tứ khởi.", c: "明月將出,蟲聲四起。", n: "Trăng sáng sắp mọc, tiếng côn trùng nổi lên bốn phía." },
+        { h: "Thời cao thời đê, thời viễn thời cận. Kỳ thanh bất nhất.", c: "時高時低,時遠時近。其聲不一。", n: "Lúc cao lúc thấp, lúc xa lúc gần. Tiếng của nó không giống nhau." },
+        { h: "La hán hữu tam nghĩa: nhất, phá tam độc tặc.", c: "羅漢有三義:一、破三毒賊。", n: "La hán có ba nghĩa : 1- Phá giặc tam độc (tham, sân và si)." },
+        { h: "Nhị, ứng nhân thiên cúng; tam, lai thế bất sanh.", c: "二、應人天供;三、來世不生。", n: "2- Đáng thọ sự cúng dường của người và trời; 3- Đời sau không còn sanh tử (luân hồi) nữa." },
+        { h: "Bồ tát thị Ấn Độ ngữ, Trung Quốc dịch vi giác hữu tình.", c: "菩薩是印度語,中國譯為覺有情。", n: "Bồ tát là tiếng Ấn Độ, Trung Quốc dịch là “Giác hữu tình”." },
+        { h: "Giác tức giác ngộ, hữu tình tức chúng sanh.", c: "覺即覺悟,有情即眾生。", n: "Giác, tức là giác ngộ; Hữu tình là chúng sanh." },
+        { h: "Ngôn kỳ dĩ Phật Pháp giáo nhân, năng linh chúng sanh khai ngộ.", c: "言其以佛法教人,能令眾生開悟。", n: "Nghĩa là Bồ tát đem Phật pháp dạy người và có năng lực/ có thể khiến cho chúng sanh được khai ngộ." },
+        { h: "Tu hành giả, tu cải hành vi, xả ác thủ thiện.", c: "修行者,修改行為,捨惡取善。", n: "Tu hành là sửa đổi hành vi, bỏ dữ làm lành." },
+        { h: "Tu hành giả, tu cải hành vi, ly tục tùng đạo dã.", c: "修行者,修改行為,離俗從道也。", n: "Tu hành là sửa đổi hành vi, lìa bỏ thế tục mà theo đạo." },
+        { h: "Ý bất tham, sân, si; thân bất sát, đạo, dâm.", c: "意不貪瞋癡;身不殺盜淫。", n: "Ý không tham lam, sân hận, ngu si; thân không sát sanh, trộm cắp và dâm ô." },
+        { h: "Khẩu bất lưỡng thiệt, bất ác khẩu, bất vọng ngữ.", c: "口不兩舌,不惡口,不妄語。", n: "Miệng không nói hai lời, không nói lời hung dữ, không nói dối trá." }
     ];
 
     let appStates = [];
@@ -252,7 +301,7 @@
         let htmlContent = '';
 
         lessonData.forEach((data, index) => {
-            let targetChars = data.c.replace(/[^\u4E00-\u9FFF一二三四五六七八九十]/g, '').split('');
+            let targetChars = data.c.replace(/[^\u4E00-\u9FFF一二三四五六七八九十、，。；“”]/g, '').replace(/[、，。；“”]/g, '').split('');
             let objectsToShuffle = targetChars.map((char, originalId) => ({ char, originalId }));
             
             appStates.push({
@@ -265,13 +314,16 @@
             htmlContent += `
                 <div class="question-card" id="card-${index}">
                     <div class="am-han-viet">Câu ${index + 1}: ${data.h}</div>
+                    
+                    <textarea class="translation-input" id="trans-input-${index}" rows="2" placeholder="Nhập dịch nghĩa tiếng Việt của bạn vào đây trước khi xếp chữ..."></textarea>
+                    
                     <div class="answer-area" id="answer-area-${index}"></div>
                     <div class="word-bank" id="word-bank-${index}"></div>
                     <div class="result-area" id="result-area-${index}">
                         <div class="full-sentence" id="full-sentence-${index}"></div>
                         <div class="translation" id="translation-${index}"></div>
                         
-                        <button class="btn-show-answer" id="btn-show-answer-${index}" style="display: none;" onclick="showAnswer(${index})">Xem đáp án</button>
+                        <button class="btn-show-answer" id="btn-show-answer-${index}" style="display: none;" onclick="showAnswer(${index})">Xem đáp án chữ Hán</button>
                         <div class="revealed-answer" id="revealed-answer-${index}" style="display: none;"></div>
                     </div>
                 </div>
@@ -347,6 +399,7 @@
         const fullSentenceEl = document.getElementById(`full-sentence-${qIndex}`);
         const translationEl = document.getElementById(`translation-${qIndex}`);
         const answerArea = document.getElementById(`answer-area-${qIndex}`);
+        const transInput = document.getElementById(`trans-input-${qIndex}`);
         
         const btnShowAnswer = document.getElementById(`btn-show-answer-${qIndex}`);
         const revealedAnswer = document.getElementById(`revealed-answer-${qIndex}`);
@@ -355,9 +408,15 @@
             state.isCompleted = true; 
             resultArea.classList.remove('error');
             fullSentenceEl.innerText = data.c; 
-            translationEl.innerText = data.n;
             
-            // Nếu đúng thì ẩn nút xem đáp án đi
+            // Hiện đáp án nghĩa chuẩn để người dùng đối chiếu
+            translationEl.innerHTML = "<strong>Nghĩa chuẩn:</strong> " + data.n;
+            
+            // Khóa ô nhập liệu lại khi đã làm đúng
+            if (transInput) {
+                transInput.disabled = true;
+            }
+            
             btnShowAnswer.style.display = 'none';
             revealedAnswer.style.display = 'none';
             resultArea.style.display = 'block';
@@ -374,7 +433,7 @@
             
             btnShowAnswer.style.display = 'inline-block';
             revealedAnswer.style.display = 'none';
-            revealedAnswer.innerText = "Đáp án: " + correctStr; // Lưu sẵn đáp án vào khung
+            revealedAnswer.innerText = "Đáp án chữ Hán: " + correctStr; 
             
             resultArea.style.display = 'block';
         }
