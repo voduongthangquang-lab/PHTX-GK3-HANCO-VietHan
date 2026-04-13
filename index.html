@@ -80,12 +80,19 @@
             color: var(--primary-dark);
             margin-top: 0;
             margin-bottom: 20px;
-            font-size: 1.8em;
+            font-size: 1.6em;
             border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            line-height: 1.4;
         }
 
-        /* --- Style cho từng phần Task (Hán, Phiên âm, Dịch) --- */
+        .q-title .phien-am {
+            color: var(--text-color);
+            font-weight: normal;
+            font-size: 0.9em;
+        }
+
+        /* --- Style cho từng phần Task (Hán, Dịch) --- */
         .task-section {
             background: #fafafa;
             border: 1px solid #e0e0e0;
@@ -141,7 +148,7 @@
         .char-block.hidden { display: none; }
         .char-block.locked { cursor: default; pointer-events: none; border-color: transparent; box-shadow: none; background: transparent;}
 
-        /* KHU VỰC NHẬP TEXT (Phiên âm & Nghĩa) */
+        /* KHU VỰC NHẬP TEXT (Nghĩa) */
         .input-group {
             display: flex;
             gap: 10px;
@@ -212,6 +219,13 @@
             font-size: 1.6em;
             color: #c62828;
             margin-top: 10px;
+        }
+        
+        .vi-result {
+            color: #c62828;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 1.1em;
         }
 
         /* HIỆU ỨNG RUNG KHI SAI */
@@ -310,26 +324,20 @@
 
             htmlContent += `
                 <div class="question-card" id="card-${index}">
-                    <h2 class="q-title">Câu ${index + 1}</h2>
+                    <h2 class="q-title">
+                        Câu ${index + 1}: <br/>
+                        <span class="phien-am">${data.h}</span>
+                    </h2>
                     
                     <div class="task-section">
-                        <div class="task-label">Bước 1: Sắp xếp chữ Hán</div>
+                        <div class="task-label">Bước 1: Ghép chữ Hán</div>
                         <div class="answer-area" id="answer-area-${index}"></div>
                         <div class="word-bank" id="word-bank-${index}"></div>
                         <div class="msg-area" id="han-msg-${index}"></div>
                     </div>
 
                     <div class="task-section">
-                        <div class="task-label">Bước 2: Nhập Phiên âm Hán Việt</div>
-                        <div class="input-group">
-                            <input type="text" class="text-input" id="pa-input-${index}" placeholder="Nhập phiên âm của câu trên...">
-                            <button class="btn-check" id="pa-btn-${index}" onclick="checkPA(${index})">Kiểm tra</button>
-                        </div>
-                        <div class="msg-area" id="pa-msg-${index}"></div>
-                    </div>
-
-                    <div class="task-section">
-                        <div class="task-label">Bước 3: Nhập Dịch nghĩa Tiếng Việt</div>
+                        <div class="task-label">Bước 2: Nhập Dịch nghĩa Tiếng Việt</div>
                         <div class="input-group">
                             <textarea class="text-input" id="dn-input-${index}" rows="2" placeholder="Nhập dịch nghĩa của câu trên..."></textarea>
                             <button class="btn-check" id="dn-btn-${index}" onclick="checkDN(${index})">Kiểm tra</button>
@@ -429,48 +437,10 @@
     function showHanAns(qIndex) {
         const data = lessonData[qIndex];
         const msgArea = document.getElementById(`han-msg-${qIndex}`);
-        msgArea.innerHTML = `<div class="han-result">Đáp án chuẩn: ${data.c}</div>`;
+        msgArea.innerHTML = `<div class="han-result"><strong>Đáp án chữ Hán:</strong> ${data.c}</div>`;
     }
 
-    /* ====== XỬ LÝ KHỐI 2: PHIÊN ÂM ====== */
-    function checkPA(qIndex) {
-        const inputEl = document.getElementById(`pa-input-${qIndex}`);
-        const btnEl = document.getElementById(`pa-btn-${qIndex}`);
-        const msgArea = document.getElementById(`pa-msg-${qIndex}`);
-        const targetStr = lessonData[qIndex].h;
-        
-        if (normalizeString(inputEl.value) === normalizeString(targetStr)) {
-            // Đúng
-            inputEl.value = targetStr; // Format lại cho đẹp
-            inputEl.disabled = true;
-            btnEl.style.display = 'none';
-            msgArea.style.display = 'block';
-            msgArea.innerHTML = `<span class="success-text">✔ Phiên âm chính xác!</span>`;
-        } else {
-            // Sai
-            inputEl.classList.remove('shake');
-            void inputEl.offsetWidth;
-            inputEl.classList.add('shake');
-            msgArea.style.display = 'block';
-            msgArea.innerHTML = `
-                <span class="error-text">✘ Chưa đúng, thử lại nhé!</span> 
-                <span class="show-ans-link" onclick="showPAAns(${qIndex})">Xem đáp án</span>
-            `;
-        }
-    }
-
-    function showPAAns(qIndex) {
-        const inputEl = document.getElementById(`pa-input-${qIndex}`);
-        const btnEl = document.getElementById(`pa-btn-${qIndex}`);
-        const msgArea = document.getElementById(`pa-msg-${qIndex}`);
-        
-        inputEl.value = lessonData[qIndex].h;
-        inputEl.disabled = true;
-        btnEl.style.display = 'none';
-        msgArea.innerHTML = `<span style="color:#d32f2f"><strong>Đáp án:</strong> ${lessonData[qIndex].h}</span>`;
-    }
-
-    /* ====== XỬ LÝ KHỐI 3: DỊCH NGHĨA ====== */
+    /* ====== XỬ LÝ KHỐI 2: DỊCH NGHĨA ====== */
     function checkDN(qIndex) {
         const inputEl = document.getElementById(`dn-input-${qIndex}`);
         const btnEl = document.getElementById(`dn-btn-${qIndex}`);
@@ -505,7 +475,7 @@
         inputEl.value = lessonData[qIndex].n;
         inputEl.disabled = true;
         btnEl.style.display = 'none';
-        msgArea.innerHTML = `<span style="color:#d32f2f"><strong>Đáp án:</strong> ${lessonData[qIndex].n}</span>`;
+        msgArea.innerHTML = `<div class="vi-result">Đáp án dịch nghĩa: ${lessonData[qIndex].n}</div>`;
     }
 
     initApp();
